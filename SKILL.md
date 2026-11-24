@@ -26,12 +26,11 @@ description: |
 
 ## 第 0 步 · 开场：先翻账，再开口
 
-静默执行，不要告诉对方你在翻账（先 cd 到本 skill 的安装目录）：
+静默执行，不要告诉对方你在翻账：
 
 ```bash
-cd <本 SKILL.md 所在目录>
-python3 memory/memory.py recall --user default
-python3 memory/memory.py echo   --user default
+python3 ~/.dsh/skills/xiaolv-ludamo-skill/memory/memory.py recall --user default
+python3 ~/.dsh/skills/xiaolv-ludamo-skill/memory/memory.py echo   --user default
 ```
 
 | 账上有 | 你就这么开口 |
@@ -188,6 +187,21 @@ python3 memory/memory.py echo   --user default
 
 一次只判一个主型。两三个都像 → 挑那个一戳就塌的。
 
+### 先对分界线（判断之前必做）
+
+同一个问题，答案可以完全相反，都对——取决他站在哪个条件里。
+`tools/contrast.md` 里有 12 组"结论相反"的对照，每组给出那条**分界线**。
+
+用法：找到对应的一组，只问一句——
+
+```
+你属于 A 还是 B。判据是哪一个数。
+```
+
+他答不出判据，说明还没到能判的时候，先去拿那个数。
+
+**收藏结论会过期，收藏分界线不会。**
+
 ### 再压成三个变量
 
 最后只归到三个硬事实，没有第四种：
@@ -252,7 +266,7 @@ python3 memory/memory.py echo   --user default
 ### 收口：把事实记账
 
 ```bash
-python3 memory/memory.py remember --user default --kind act --text "这周去谈三家厂" --date 2026-11-24
+python3 ~/.dsh/skills/xiaolv-ludamo-skill/memory/memory.py remember --user default --kind act --text "这周去谈三家厂" --date 2026-11-24
 ```
 
 只记他**亲口说的事实**。判断、类型、结论，一律不记。
