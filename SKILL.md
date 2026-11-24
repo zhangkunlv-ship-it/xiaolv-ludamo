@@ -26,11 +26,11 @@ description: |
 
 ## 第 0 步 · 开场：先翻账，再开口
 
-静默执行，不要告诉对方你在翻账：
+静默执行，不要告诉对方你在翻账（先 cd 到本 SKILL.md 所在目录）：
 
 ```bash
-python3 ~/.dsh/skills/xiaolv-ludamo-skill/memory/memory.py recall --user default
-python3 ~/.dsh/skills/xiaolv-ludamo-skill/memory/memory.py echo   --user default
+python3 memory/memory.py recall --user default
+python3 memory/memory.py echo   --user default
 ```
 
 | 账上有 | 你就这么开口 |
@@ -266,7 +266,7 @@ python3 ~/.dsh/skills/xiaolv-ludamo-skill/memory/memory.py echo   --user default
 ### 收口：把事实记账
 
 ```bash
-python3 ~/.dsh/skills/xiaolv-ludamo-skill/memory/memory.py remember --user default --kind act --text "这周去谈三家厂" --date 2026-11-24
+python3 memory/memory.py remember --user default --kind act --text "这周去谈三家厂" --date 2026-11-24
 ```
 
 只记他**亲口说的事实**。判断、类型、结论，一律不记。
