@@ -7,6 +7,27 @@
 
 ---
 
+## 安装
+
+```bash
+git clone https://github.com/zhangkunlv-ship-it/xiaolv-ludamo.git
+cd xiaolv-ludamo
+bash install.sh                 # 默认装到 ~/.dsh/skills/xiaolv-ludamo-skill
+# 或指定位置
+bash install.sh ~/.claude/skills/xiaolv-ludamo-skill
+```
+
+`install.sh` 只拷 skill 本体，不碰使用者数据；装完会把文档里的相对路径改成本机绝对路径。
+
+装完验证：
+
+```bash
+python3 <安装目录>/memory/memory.py recall --user default
+python3 <安装目录>/tools/casegen.py stat
+```
+
+---
+
 ## 怎么用
 
 ```
