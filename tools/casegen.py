@@ -21,6 +21,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 SEEDS = HERE / "case-bank" / "seeds.jsonl"
 STORIES = HERE / "case-bank" / "stories.jsonl"
+EVIDENCE_DIR = HERE / "case-bank" / "evidence"
 CASES = HERE / "case-bank" / "cases.jsonl"
 
 # 行业画像：品类 / 渠道 / 货 / 客户
@@ -222,6 +223,44 @@ def cmd_validate(a) -> None:
         print("  全部通过")
 
 
+def load_evidence() -> list[dict]:
+    """真实连麦提炼的判断依据（八字段，不进公开仓库）。"""
+    if not EVIDENCE_DIR.exists():
+        return []
+    out = []
+    for f in sorted(EVIDENCE_DIR.glob("*.jsonl")):
+        for ln in f.read_text(encoding="utf-8").splitlines():
+            if ln.strip():
+                r = json.loads(ln)
+                r["_file"] = f.stem
+                out.append(r)
+    return out
+
+
+def cmd_evidence(a) -> None:
+    """按类型/关键词取一条真实判断依据。"""
+    rows = load_evidence()
+    if not rows:
+        print(json.dumps({"found": False, "note": "证据库为空。先跑蒸馏。"}, ensure_ascii=False))
+        return
+    def sc(r):
+        v = 0
+        if a.type:
+            v += 10 if r.get("type") == a.type else 0
+        if a.kw:
+            body = " ".join([r.get("case",""), r.get("verdict",""), r.get("line",""), r.get("do",""), " ".join(r.get("tags",[]))])
+            if a.kw in body: v += 6
+            elif any(al in body for al in SYN.get(a.kw, [])): v += 3
+        if a.conflict_only and r.get("conflict"): v += 8
+        return v
+    ranked = sorted(((sc(r), r) for r in rows), key=lambda x: -x[0])
+    top = [(v, r) for v, r in ranked if v >= 3][: a.limit]
+    if not top:
+        print(json.dumps({"found": False, "note": "没有匹配。"}, ensure_ascii=False)); return
+    for v, r in top:
+        print(json.dumps({"score": v, **r}, ensure_ascii=False))
+
+
 def cmd_stat(a) -> None:
     rows = load_cases()
     print(f"[库] {CASES}")
@@ -238,6 +277,11 @@ def cmd_stat(a) -> None:
         print(f"    {k:<12} {v}")
     print("  按行业：", "，".join(f"{k} {v}" for k, v in by_i.items()))
     print("  按档位：", "，".join(f"{k}档 {v}" for k, v in by_l.items()))
+    ev = load_evidence()
+    if ev:
+        from collections import Counter as C
+        print(f"  真实证据（evidence/）: {len(ev)} 条，来自 {len({r['_file'] for r in ev})} 个视频")
+        print("    类型分布：", "，".join(f"{k} {v}" for k, v in C(r.get('type','?') for r in ev).most_common()))
 
 
 def main() -> None:
@@ -259,6 +303,12 @@ def main() -> None:
 
     sp.add_parser("stat")
 
+    p = sp.add_parser("evidence")
+    p.add_argument("--type", default="")
+    p.add_argument("--kw", default="")
+    p.add_argument("--conflict-only", action="store_true", dest="conflict_only")
+    p.add_argument("--limit", type=int, default=1)
+
     p = sp.add_parser("story")
     p.add_argument("--type", default="")
     p.add_argument("--level", default="")
@@ -268,7 +318,8 @@ def main() -> None:
 
     a = ap.parse_args()
     {"generate": cmd_generate, "search": cmd_search, "story": cmd_story,
-     "validate": cmd_validate, "stat": cmd_stat}[a.cmd](a)
+     "validate": cmd_validate, "stat": cmd_stat,
+     "evidence": cmd_evidence}[a.cmd](a)
 
 
 if __name__ == "__main__":

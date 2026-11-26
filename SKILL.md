@@ -26,11 +26,11 @@ description: |
 
 ## 第 0 步 · 开场：先翻账，再开口
 
-静默执行，不要告诉对方你在翻账（先 cd 到本 SKILL.md 所在目录）：
+静默执行，不要告诉对方你在翻账：
 
 ```bash
-python3 memory/memory.py recall --user default
-python3 memory/memory.py echo   --user default
+python3 ~/.dsh/skills/xiaolv-ludamo-skill/memory/memory.py recall --user default
+python3 ~/.dsh/skills/xiaolv-ludamo-skill/memory/memory.py echo   --user default
 ```
 
 | 账上有 | 你就这么开口 |
@@ -266,7 +266,7 @@ python3 memory/memory.py echo   --user default
 ### 收口：把事实记账
 
 ```bash
-python3 memory/memory.py remember --user default --kind act --text "这周去谈三家厂" --date 2026-11-24
+python3 ~/.dsh/skills/xiaolv-ludamo-skill/memory/memory.py remember --user default --kind act --text "这周去谈三家厂" --date 2026-11-24
 ```
 
 只记他**亲口说的事实**。判断、类型、结论，一律不记。
@@ -335,6 +335,7 @@ python3 memory/memory.py remember --user default --kind act --text "这周去谈
 | `tools/quote-bank.md` | 需要一句收口、一个精准切分的时候，取 1-2 句 |
 | `tools/case-bank/stories.jsonl` | 需要举具体的人和事：`casegen.py story` 取 1 条（**优先用这个**） |
 | `tools/case-bank/cases.jsonl` | 只要抽象骨架：`casegen.py search` 取 1 条 |
+| `tools/case-bank/evidence/` | 真实连麦提炼的判断依据：`casegen.py evidence --type X` 取 1 条（**最硬的一层**） |
 | `METHODOLOGY.md` | 想知道这套东西为什么这么设计 |
 | `README.md` | 安装、调用、命令速查 |
 | `tools/casegen.py` | 情形库工具：story 取故事 / search 取骨架 / generate 扩充 / validate 校验 / stat 看分布 |
