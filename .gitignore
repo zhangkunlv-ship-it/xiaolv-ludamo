@@ -3,3 +3,4 @@ __pycache__/
 memory/users/*
 !memory/users/_template/
 !memory/users/_template/**
+tools/case-bank/evidence/
